@@ -17,11 +17,13 @@ export const searchProducts = async (
   searchTerm: string,
   page: number,
   sort: string | null,
+  signal: AbortSignal,
 ): Promise<ProductsResponse> => {
   const [sortBy, order] = sort?.split("-") ?? ["id", "asc"];
   const skip = (page - 1) * 10;
   const products = await axios.get<ProductsResponse>(
     `https://dummyjson.com/products/search?q=${searchTerm}&limit=10&skip=${skip}&sortBy=${sortBy}&order=${order}`,
+    { signal },
   );
   return products.data;
 };
@@ -66,9 +68,12 @@ export const updateProduct = async (
   title: string,
   price: number,
 ): Promise<Product> => {
-  const product = await axios.put(`https://dummyjson.com/products/${id}`, {
-    title,
-    price,
-  });
+  const product = await axios.put<Product>(
+    `https://dummyjson.com/products/${id}`,
+    {
+      title,
+      price,
+    },
+  );
   return product.data;
 };

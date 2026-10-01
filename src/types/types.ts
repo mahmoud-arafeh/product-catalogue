@@ -25,7 +25,6 @@ export interface PaginationProps {
 export interface Category {
   slug: string;
   name: string;
-  link: string;
 }
 
 export interface Review {
@@ -47,4 +46,15 @@ export interface ShortListProps {
 
 export interface CompareProps {
   shortList: number[];
+}
+
+export interface HeaderProps {
+  shortList: number[];
+}
+
+export interface ProductCardProps {
+  product: Product;
+  isShortlisted: boolean;
+  onAdd: (id: number) => void;
+  onRemove: (id: number) => void;
 }

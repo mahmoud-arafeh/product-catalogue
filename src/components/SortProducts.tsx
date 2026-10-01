@@ -1,7 +1,9 @@
 import { useSearchParams } from "react-router-dom";
+import { useState } from "react";
 
 function SortProducts() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [show, setShow] = useState(false);
 
   const sortHandler = (option: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -12,23 +14,36 @@ function SortProducts() {
       newParams.delete("sort");
     }
     setSearchParams(newParams);
+    setShow(false);
   };
 
   return (
-    <div>
-      <button onClick={() => sortHandler("price-asc")}>
-        Price: lowest first
+    <div className="sort-menu">
+      <button className="sort-button" onClick={() => setShow(!show)}>
+        Sort
       </button>
-      <button onClick={() => sortHandler("price-desc")}>
-        Price: highest first
-      </button>
-      <button onClick={() => sortHandler("rating-desc")}>
-        Rate: highest first
-      </button>
-      <button onClick={() => sortHandler("rating-asc")}>
-        Rate: lowest first
-      </button>
-      <button onClick={() => sortHandler("")}>Cancel</button>
+
+      {show && (
+        <div className="sort-list">
+          <button onClick={() => sortHandler("price-asc")}>
+            Price: lowest first
+          </button>
+
+          <button onClick={() => sortHandler("price-desc")}>
+            Price: highest first
+          </button>
+
+          <button onClick={() => sortHandler("rating-desc")}>
+            Rate: highest first
+          </button>
+
+          <button onClick={() => sortHandler("rating-asc")}>
+            Rate: lowest first
+          </button>
+
+          <button onClick={() => sortHandler("")}>Clear sorting</button>
+        </div>
+      )}
     </div>
   );
 }

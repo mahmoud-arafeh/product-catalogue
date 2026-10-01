@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getCategories } from "../services/product";
 import type { Category } from "../types/types";
 import { useSearchParams } from "react-router-dom";
+import "../styles/productList.css";
 
 function Categories() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -39,24 +40,33 @@ function Categories() {
   const categoriesList = categories.map((cat) => {
     return (
       <div key={cat.slug}>
-        <button onClick={() => selectHandler(cat.slug)}>{cat.name}</button>
+        <button
+          className="category-option"
+          onClick={() => selectHandler(cat.slug)}
+        >
+          {cat.name}
+        </button>
       </div>
     );
   });
 
   return show ? (
-    <div>
-      <button onClick={() => setShow(!show)}>Categories</button>
+    <div className="categories-menu">
+      <button className="category-button" onClick={() => setShow(!show)}>
+        Categories
+      </button>
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
         <p role="alert">{error}</p>
       ) : (
-        categoriesList
+        <div className="categories-list">{categoriesList}</div>
       )}
     </div>
   ) : (
-    <button onClick={() => setShow(!show)}>Categories</button>
+    <button className="category-button" onClick={() => setShow(!show)}>
+      Categories
+    </button>
   );
 }
 

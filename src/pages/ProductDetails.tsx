@@ -55,7 +55,7 @@ function ProductDetails() {
       return;
     }
     if (!Number.isFinite(price) || price < 0) {
-      setSaveError("Price must be a valid positive number.");
+      setSaveError("Price must be a valid non-negative number.");
       return;
     }
     setSaving(true);
@@ -88,18 +88,18 @@ function ProductDetails() {
     return <p>Product not found.</p>;
   }
   const productData = (
-    <main>
+    <main className="product-details">
       <article>
-        <section>
-          <div>
+        <section className="product-main">
+          <div className="product-images">
             {product.images.map((image) => (
               <img key={image} src={image} alt={product.title} />
             ))}
           </div>
-          <div>
+          <div className="product-info">
             {isEditing ? (
               <>
-                <label>
+                <label className="edit-field">
                   Title
                   <input
                     type="text"
@@ -107,7 +107,7 @@ function ProductDetails() {
                     onChange={(e) => setEditedTitle(e.target.value)}
                   />
                 </label>
-                <label>
+                <label className="edit-field">
                   Price
                   <input
                     type="number"
@@ -116,12 +116,18 @@ function ProductDetails() {
                   />
                 </label>
                 {saveError && <p role="alert">{saveError}</p>}
-                <button type="button" onClick={cancelHandler} disabled={saving}>
-                  Cancel
-                </button>
-                <button type="button" onClick={saveHandler} disabled={saving}>
-                  {saving ? "Saving..." : "Save"}
-                </button>
+                <div className="edit-actions">
+                  <button
+                    type="button"
+                    onClick={cancelHandler}
+                    disabled={saving}
+                  >
+                    Cancel
+                  </button>
+                  <button type="button" onClick={saveHandler} disabled={saving}>
+                    {saving ? "Saving..." : "Save"}
+                  </button>
+                </div>
               </>
             ) : (
               <>
@@ -129,6 +135,7 @@ function ProductDetails() {
                 <p>Price: ${product.price}</p>
 
                 <button
+                  className="edit-button"
                   type="button"
                   onClick={() => {
                     setSaveError(null);
@@ -139,15 +146,15 @@ function ProductDetails() {
                 </button>
               </>
             )}
-            <p>{product.description}</p>
-            <p>Rating: {product.rating}/5</p>
-            <p>Stock: {product.stock}</p>
+            <p className="product-description">{product.description}</p>
+            <p className="product-rating">Rating: {product.rating}/5</p>
+            <p className="product-stock">Stock: {product.stock}</p>
           </div>
         </section>
-        <section>
+        <section className="product-reviews">
           <h2>Reviews</h2>
           {product.reviews.map((review) => (
-            <article key={review.reviewerEmail}>
+            <article className="review-card" key={review.reviewerEmail}>
               <h3>{review.reviewerName}</h3>
               <p>{review.comment}</p>
               <p>Rating: {review.rating}/5</p>

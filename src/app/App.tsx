@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "../styles/App.css";
-import Catalogue from "../components/Catalogue";
-import Product from "../components/ProductDetails";
-import ShortList from "../components/ShortList";
-import NotFound from "../components/Notfound";
-import Compare from "../components/Compare";
+import Catalogue from "../pages/Catalogue";
+import ProductDetails from "../pages/ProductDetails";
+import ShortList from "../pages/ShortList";
+import NotFound from "../pages/Notfound";
+import Compare from "../pages/Compare";
+import Header from "../components/Header";
+import OfflineBanner from "../components/OfflineBanner";
 
 function App() {
   const [shortList, setShortList] = useState<number[]>(() => {
@@ -20,9 +21,32 @@ function App() {
     localStorage.setItem("shortList", JSON.stringify(shortList));
   }, [shortList]);
 
+  useEffect(() => {
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key !== "shortList") {
+        return;
+      }
+
+      if (event.newValue === null) {
+        setShortList([]);
+        return;
+      }
+
+      setShortList(JSON.parse(event.newValue));
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   return (
     <div>
       <BrowserRouter>
+        <OfflineBanner />
+        <Header shortList={shortList} />
         <Routes>
           <Route path="/" element={<Navigate to="/products" replace />} />
           <Route
@@ -31,7 +55,7 @@ function App() {
               <Catalogue shortList={shortList} setShortList={setShortList} />
             }
           />
-          <Route path="/products/:id" element={<Product />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
           <Route
             path="/shortlist"
             element={

@@ -59,11 +59,15 @@ function Compare({ shortList }: CompareProps) {
 
   const productList = products.map((product) => {
     return (
-      <article key={product.id}>
+      <article className="compare-card" key={product.id}>
         <img src={product.thumbnail} alt={product.title} />
         <h2>{product.title}</h2>
-        {cheapestProduct?.id === product.id && <strong>Cheapest</strong>}
-        {bestRatedProduct?.id === product.id && <strong>Best rated</strong>}
+        {cheapestProduct?.id === product.id && (
+          <span className="compare-badge">Cheapest</span>
+        )}
+        {bestRatedProduct?.id === product.id && (
+          <span className="compare-badge">Best rated</span>
+        )}
         <p>Price: ${product.price}</p>
         <p>Rating: {product.rating}/5</p>
       </article>
@@ -79,7 +83,7 @@ function Compare({ shortList }: CompareProps) {
         error ? (
           <p role="alert">{error}</p>
         ) : (
-          <p>Your shortlist is empty.</p>
+          <p className="empty-state">Your shortlist is empty.</p>
         )
       ) : (
         <>

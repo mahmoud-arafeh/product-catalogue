@@ -51,7 +51,7 @@ function ShortList({ shortList, setShortList }: ShortListProps) {
 
   const productsList = products.map((product) => {
     return (
-      <article key={product.id}>
+      <article className="shortlist-card" key={product.id}>
         <img src={product.thumbnail} alt={product.title} />
         <h2>{product.title}</h2>
         <p>Price: ${product.price}</p>
@@ -69,9 +69,15 @@ function ShortList({ shortList, setShortList }: ShortListProps) {
   return (
     <main>
       <h1>Shortlist</h1>
-      <Link to="/compare"> Compare products</Link>
+      <Link className="compare-link" to="/compare">
+        Compare products
+      </Link>
       {error && <p role="alert">{error}</p>}
-      {products.length === 0 ? <p> Your shortlist is empty.</p> : productsList}
+      {products.length === 0 ? (
+        <p className="empty-state"> Your shortlist is empty.</p>
+      ) : (
+        <div className="shortlist-grid">{productsList}</div>
+      )}
     </main>
   );
 }

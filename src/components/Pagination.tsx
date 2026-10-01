@@ -12,9 +12,9 @@ function Pagination({ totalPages }: PaginationProps) {
     setSearchParams(newParams);
   };
   return (
-    <div>
+    <div className="pagination">
       <button
-        disabled={currentPage === 1}
+        disabled={currentPage === 0 || currentPage === 1}
         onClick={() => handlePageChange(currentPage - 1)}
       >
         Previous
@@ -23,7 +23,7 @@ function Pagination({ totalPages }: PaginationProps) {
       <span>Page {currentPage}</span>
 
       <button
-        disabled={currentPage === totalPages}
+        disabled={totalPages === 0 || currentPage === totalPages}
         onClick={() => handlePageChange(currentPage + 1)}
       >
         Next
