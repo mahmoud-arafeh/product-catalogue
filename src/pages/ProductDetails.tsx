@@ -58,18 +58,25 @@ function ProductDetails() {
       setSaveError("Price must be a valid non-negative number.");
       return;
     }
+    const previousProduct = product;
     setSaving(true);
     setSaveError(null);
+    setProduct((currentProduct) => {
+      if (!currentProduct) return currentProduct;
+
+      return {
+        ...currentProduct,
+        title: trimmedTitle,
+        price,
+      };
+    });
     try {
       await updateProduct(product.id.toString(), trimmedTitle, price);
-      setProduct((currentProduct) => {
-        if (!currentProduct) return currentProduct;
-        return { ...currentProduct, title: trimmedTitle, price };
-      });
       setEditedTitle(trimmedTitle);
       setEditedPrice(String(price));
       setIsEditing(false);
     } catch {
+      setProduct(previousProduct);
       setSaveError("Failed to save changes. Please try again.");
     } finally {
       setSaving(false);
