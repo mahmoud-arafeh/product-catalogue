@@ -2,36 +2,25 @@ import { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 
 import { getCategory, getProducts, searchProducts } from "../services/product";
-import type { Product } from "../types/types";
+import type { Product, CatalogueProps } from "../types/types";
 import Pagination from "./Pagination";
 import SearchBar from "./SearchProducts";
 import SortProducts from "./SortProducts";
 import Categories from "./Categories";
 import "../styles/productList.css";
 
-function Catalogue() {
+function Catalogue({ shortList, setShortList }: CatalogueProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [searchParams] = useSearchParams();
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [shortList, setShortList] = useState<number[]>(() => {
-    const storageProducts = localStorage.getItem("shortList");
-    if (!storageProducts) {
-      return [];
-    }
-    return JSON.parse(storageProducts);
-  });
   const [shortListMessage, setShortListMessage] = useState("");
 
   const currentPage = Number(searchParams.get("page")) || 1;
   const searchTerm = searchParams.get("search");
   const sortBy = searchParams.get("sort");
   const category = searchParams.get("category");
-
-  useEffect(() => {
-    localStorage.setItem("shortList", JSON.stringify(shortList));
-  }, [shortList]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -101,7 +90,7 @@ function Catalogue() {
   return (
     <div>
       <SearchBar />
-      <Link to={`/shortList`}>shortList: {shortList.length}</Link>
+      <Link to={`/shortlist`}>shortList: {shortList.length}</Link>
       <Categories />
       <SortProducts />
       {shortListMessage && <p role="alert">{shortListMessage}</p>}

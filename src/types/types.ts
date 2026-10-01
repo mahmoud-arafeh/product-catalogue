@@ -8,7 +8,7 @@ export interface Product {
   thumbnail: string;
   stock: number;
   images: string[];
-  reviews: Review[]
+  reviews: Review[];
 }
 
 export interface ProductsResponse {
@@ -34,4 +34,17 @@ export interface Review {
   date: string;
   reviewerName: string;
   reviewerEmail: string;
+}
+
+export interface CatalogueProps {
+  shortList: number[];
+  setShortList: React.Dispatch<React.SetStateAction<number[]>>;
+}
+export interface ShortListProps {
+  shortList: number[];
+  setShortList: React.Dispatch<React.SetStateAction<number[]>>;
+}
+
+export interface CompareProps {
+  shortList: number[];
 }

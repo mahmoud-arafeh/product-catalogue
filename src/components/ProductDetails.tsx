@@ -14,15 +14,14 @@ function ProductDetails() {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    if (!id) return;
     const fetchProduct = async () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await getProductDetails(id);
+        const data = await getProductDetails(id!);
         setProduct(data);
         setEditedTitle(data.title);
         setEditedPrice(String(data.price));
@@ -30,7 +29,7 @@ function ProductDetails() {
         if (error instanceof Error && error.message === "PRODUCT_NOT_FOUND") {
           setError("Product not found.");
         } else {
-          setError("Unable to load product.");
+          setError("Unable to load product. Please try again.");
         }
       } finally {
         setLoading(false);
@@ -82,7 +81,7 @@ function ProductDetails() {
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <p role="alert">{error}</p>;
   }
 
   if (!product) {
@@ -108,7 +107,6 @@ function ProductDetails() {
                     onChange={(e) => setEditedTitle(e.target.value)}
                   />
                 </label>
-
                 <label>
                   Price
                   <input

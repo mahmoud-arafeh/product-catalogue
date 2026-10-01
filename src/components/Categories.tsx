@@ -8,6 +8,7 @@ function Categories() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const selectHandler = (slug: string) => {
@@ -22,11 +23,12 @@ function Categories() {
   useEffect(() => {
     const fetchCategories = async () => {
       setLoading(true);
+      setError(null);
       try {
         const data = await getCategories();
         setCategories(data);
-      } catch (error) {
-        console.log(error);
+      } catch {
+        setError("Unable to load categories. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -45,7 +47,13 @@ function Categories() {
   return show ? (
     <div>
       <button onClick={() => setShow(!show)}>Categories</button>
-      {loading ? <p>Loading...</p> : categoriesList}
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p role="alert">{error}</p>
+      ) : (
+        categoriesList
+      )}
     </div>
   ) : (
     <button onClick={() => setShow(!show)}>Categories</button>
